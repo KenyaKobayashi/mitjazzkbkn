@@ -127,10 +127,10 @@ if ($text == 'はい') {
 } else {
   $response_format_text = [
     "type" => "template",
-    "altText" => "こんにちわ 何かご用ですか？（はい／いいえ）",
+    "altText" => "こんにちは 何かご用ですか？（はい／いいえ）",
     "template" => [
         "type" => "confirm",
-        "text" => "こんにちわ 何かご用ですか？",
+        "text" => "こんにちは 何かご用ですか？",
         "actions" => [
             [
               "type" => "message",
