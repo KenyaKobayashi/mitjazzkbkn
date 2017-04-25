@@ -25,7 +25,10 @@ $response_format_text = [
  "type" => "text",
  "text" => "画像"
  ];
-
+$post_data = [
+  "replyToken" => $replyToken,
+  "messages" => [$response_format_text]
+  ];
 
 }
 //メッセージ以外のときは何も返さず終了
