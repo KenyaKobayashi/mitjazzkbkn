@@ -11,28 +11,27 @@ $replyToken = $jsonObj->{"events"}[0]->{"replyToken"};
 //messageId取得
 $messageId = $jsonObj->{"events"}[0]->{"message"}->{"id"};
 //imageならバイナリ取得
-if($type == "image"){
-  $ch = curl_init("https://api.line.me/v2/bot/message/".$messageId."/content");
- 'Authorization: Bearer ' . $accessToken
- 'Content-Type: application/json; charser=UTF-8',
- ));
-$result = curl_exec($ch);
-curl_close($ch);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+// if($type == "image"){
+//   $ch = curl_init("https://api.line.me/v2/bot/message/".$messageId."/content");
+//  'Authorization: Bearer ' . $accessToken
+//  'Content-Type: application/json; charser=UTF-8',
+//  ));
+// $result = curl_exec($ch);
+// curl_close($ch);
 
-$response_format_text = [
- "type" => "text",
- "text" => "画像"
- ];
-$post_data = [
-  "replyToken" => $replyToken,
-  "messages" => [$response_format_text]
-  ];
 
-}
+// $response_format_text = [
+//  "type" => "text",
+//  "text" => "画像"
+//  ];
+// $post_data = [
+//   "replyToken" => $replyToken,
+//   "messages" => [$response_format_text]
+//   ];
+
+// }
 //メッセージ以外のときは何も返さず終了
-else if($type != "text"){
+if($type != "image"){
 	exit;
 }
 //返信データ作成
