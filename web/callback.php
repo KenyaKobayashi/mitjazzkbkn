@@ -42,9 +42,9 @@ fclose($fp);
 
 //そのまま画像をオウム返しで送信  
  $response_format_text = [
- "type" => "image",
- "originalContentUrl" => "【画像ファイルのパス】/img/test.jpg",
- "previewImageUrl" => "【画像ファイルのパス】/img/test.jpg"
+ "type" => "text",
+ "text" => "画像"
+ 
  ];
 
 $post_data = [
