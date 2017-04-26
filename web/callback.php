@@ -88,6 +88,7 @@ $mail->Send();
 //そのまま画像をオウム返しで送信  
  $response_format_text = [
  "type" => "text",
+ "text" => "画像"
  // "originalContentUrl" => "【画像ファイルのパス】/img/test.jpg",
  // "previewImageUrl" => "【画像ファイルのパス】/img/test.jpg"
  ];
