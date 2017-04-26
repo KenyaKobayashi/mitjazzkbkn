@@ -1,4 +1,9 @@
 <?php
+// Phpmailerの読み込み
+require_once ( './PHPMailer-master/PHPMailerAutoload.php' );
+ 
+
+
 $accessToken = getenv('LINE_CHANNEL_ACCESS_TOKEN');
 //ユーザーからのメッセージ取得
 $json_string = file_get_contents('php://input');
@@ -21,30 +26,70 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 $result = curl_exec($ch);
 curl_close($ch);
 
-//画像ファイルの作成  
-$fp = fopen('./img/test.jpg', 'wb');
 
-if ($fp){
-    if (flock($fp, LOCK_EX)){
-        if (fwrite($fp,  $result ) === FALSE){
-            print('ファイル書き込みに失敗しました<br>');
-        }else{
-            print($data.'をファイルに書き込みました<br>');
-        }
+/* SMTP接続 */
+//define('MAIL_HOST','example.sakura.ne.jp:587');  // さくらのメールの場合
+define('MAIL_HOST','smtp.gmail.com:465'); // Gmailの場合
+define('MAIL_USERNAME','kobaken.5884.guitar@gmail.com');
+define('MAIL_PASSWORD','Kobakenk5884');
+define('MAIL_FROM','kobaken.5884.guitar@gmail.com');
+define('MAIL_CHARSET','iso-2022-jp');
+define('MAIL_ENCODING','7bit');
+define('MAIL_PHP_LANGUAGE','japanese');
+define('MAIL_PHP_INTERNAL_ENCODING','UTF-8');
+define('MAIL_FROM_NAME','シフト自動送信');
 
-        flock($fp, LOCK_UN);
-    }else{
-        print('ファイルロックに失敗しました<br>');
-    }
-}
+mb_language(MAIL_PHP_LANGUAGE);
+mb_internal_encoding(MAIL_PHP_INTERNAL_ENCODING);
+$mail = new PHPMailer();
+$mail->CharSet = MAIL_CHARSET;
+$mail->Encoding = MAIL_ENCODING;
 
-fclose($fp);
+//SMTP接続
+$mail->IsSMTP();
+$mail->SMTPAuth = TRUE;
+$mail->SMTPSecure = 'ssl';  // Gmailの場合はこれが必要！
+$mail->Host = MAIL_HOST;  //メールサーバー
+$mail->Username = MAIL_USERNAME; //アカウント名
+$mail->Password = TMMAIL_PASSWORD; //アカウントのパスワード
+$mail->From = MAIL_FROM; //差出人(From)をセット
+$mail->FromName = mb_encode_mimeheader(MAIL_FROM_NAME); //差出人の名前
+
+$mail->ClearAddresses();  // 宛先アドレスを前に指定した場合はクリア
+$mail->AddAddress(‘kobaken.5884.guitar@gmail.com’); //宛先アドレス1。
+
+
+$mail->Subject = mb_encode_mimeheader('シフト変更通知');  //メールサブジェクトの指定
+// 本文を指定
+$mail->Body  = mb_convert_encoding('シフトが変更されました。', 'JIS', TMMAIL_PHP_INTERNAL_ENCODING);
+//送信
+$mail->Send();
+
+
+// //画像ファイルの作成  
+// $fp = fopen('./img/test.jpg', 'wb');
+
+// if ($fp){
+//     if (flock($fp, LOCK_EX)){
+//         if (fwrite($fp,  $result ) === FALSE){
+//             print('ファイル書き込みに失敗しました<br>');
+//         }else{
+//             print($data.'をファイルに書き込みました<br>');
+//         }
+
+//         flock($fp, LOCK_UN);
+//     }else{
+//         print('ファイルロックに失敗しました<br>');
+//     }
+// }
+
+// fclose($fp);
 
 //そのまま画像をオウム返しで送信  
  $response_format_text = [
- "type" => "text",
- "text" => "画像"
- 
+ "type" => "image",
+ // "originalContentUrl" => "【画像ファイルのパス】/img/test.jpg",
+ // "previewImageUrl" => "【画像ファイルのパス】/img/test.jpg"
  ];
 
 $post_data = [
